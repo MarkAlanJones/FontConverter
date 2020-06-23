@@ -7,16 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Meadow Font Converter"
     Width="1000"
-    Height="800"
+    Height="1000"
     Loaded="Window_Loaded"
     mc:Ignorable="d">
-    <Grid x:Name="MainGrid" ShowGridLines="True">
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -36,7 +37,6 @@
             Margin="0"
             Foreground="Black" />
 
-
         <Border
             Grid.Row="4"
             BorderBrush="BlueViolet"
@@ -55,6 +55,20 @@
             FontWeight="Bold"
             Foreground="Black"
             Text="@@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@"
+            TextWrapping="Wrap" />
+
+        <TextBox
+            x:Name="CodeOutput"
+            Grid.Row="5"
+            Grid.ColumnSpan="2"
+            Height="200"
+            HorizontalContentAlignment="Stretch"
+            AcceptsReturn="True"
+            BorderBrush="DarkCyan"
+            BorderThickness="5"
+            FontSize="10"
+            Foreground="Black"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
             TextWrapping="Wrap" />
     </Grid>
 </Window>
