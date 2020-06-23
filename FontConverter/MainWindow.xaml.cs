@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +37,7 @@ namespace FontConverter
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            string cr = "";
             foreach (Typeface typeface in TheFontFamily.GetTypefaces())
             {
                 // which face are we using ?             
@@ -42,6 +45,7 @@ namespace FontConverter
                 if (glyph != null)
                 {
                     characterMap = glyph.CharacterToGlyphMap;
+                    cr = glyph.Copyrights.Values.FirstOrDefault();
                 }
             }
 
@@ -75,7 +79,7 @@ namespace FontConverter
                             Grid.SetRow(i, y);
                             Grid.SetColumn(i, x);
 
-                            MyCharMap[c] = x * y + x;
+                            MyCharMap[c] = x + y * 60;
                         }
                         c++;
                     }
@@ -89,6 +93,9 @@ namespace FontConverter
             Label2.Content = TheFont.FontFamily.Name; // TheFontFamily.Source;
             Label2.FontFamily = TheFontFamily;
             Label2.FontSize = 16;
+
+            Label3.Content = cr;
+            Label3.FontSize = 16;
 
             // Generate Code the Meadow can use
 

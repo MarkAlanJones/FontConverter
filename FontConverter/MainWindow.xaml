@@ -36,6 +36,12 @@
             Grid.Column="0"
             Margin="0"
             Foreground="Black" />
+        <Label
+            x:Name="Label3"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0"
+            Foreground="Black" />
 
         <Border
             Grid.Row="4"

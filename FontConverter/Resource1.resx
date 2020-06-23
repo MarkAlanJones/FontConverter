@@ -118,7 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CodeTemplate" xml:space="preserve">
-    <value>namespace Meadow.Foundation.Graphics
+    <value>using System.Collections.Generic;
+
+namespace Meadow.Foundation.Graphics
 {
     // This is Generated Code
     public class MYFONTNAME : FontBase
@@ -137,7 +139,7 @@
 //FONTTABLE 
         };
 
-        var characterMap = new Dictionary&lt;int, ushort&gt; 
+        private static readonly Dictionary&lt;int, ushort&gt;characterMap = new Dictionary&lt;int, ushort&gt; 
         {
             //CHARMAP
         };
@@ -157,7 +159,7 @@
             {
                 var c = (int)character;
                 if (characterMap.ContainsKey(c))
-                   return _fontTable[characterMap(k)];
+                   return _fontTable[characterMap[c]];
                 else
                    return _fontTable[0];
             }

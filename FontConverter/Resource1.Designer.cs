@@ -61,7 +61,9 @@ namespace FontConverter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace Meadow.Foundation.Graphics
+        ///   Looks up a localized string similar to using System.Collections.Generic;
+        ///
+        ///namespace Meadow.Foundation.Graphics
         ///{
         ///    // This is Generated Code
         ///    public class MYFONTNAME : FontBase
@@ -75,7 +77,7 @@ namespace FontConverter {
         ///        /// &lt;summary&gt;
         ///        ///   Font table containing the binary representation of ASCII characters.
         ///        /// &lt;/summary&gt;
-        ///        private static readonly byte[][] _fontTabl [rest of string was truncated]&quot;;.
+        ///        priva [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CodeTemplate {
             get {
