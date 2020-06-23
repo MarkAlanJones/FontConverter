@@ -66,6 +66,7 @@ namespace FontConverter {
         ///namespace Meadow.Foundation.Graphics
         ///{
         ///    // This is Generated Code
+        ///    // Based on FONTINFO
         ///    public class MYFONTNAME : FontBase
         ///    {
         ///        private const int WIDTH = 12;
@@ -76,8 +77,7 @@ namespace FontConverter {
         ///
         ///        /// &lt;summary&gt;
         ///        ///   Font table containing the binary representation of ASCII characters.
-        ///        /// &lt;/summary&gt;
-        ///        priva [rest of string was truncated]&quot;;.
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CodeTemplate {
             get {

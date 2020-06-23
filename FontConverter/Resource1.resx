@@ -123,6 +123,7 @@
 namespace Meadow.Foundation.Graphics
 {
     // This is Generated Code
+    // Based on FONTINFO
     public class MYFONTNAME : FontBase
     {
         private const int WIDTH = 12;

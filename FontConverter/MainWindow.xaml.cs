@@ -100,6 +100,7 @@ namespace FontConverter
             // Generate Code the Meadow can use
 
             string code = Resource1.CodeTemplate;
+            code = code.Replace("FONTINFO", (string)Label2.Content + " " + (string)Label3.Content);
             code = code.Replace("MYFONTNAME", (string)Label2.Content + "12x20");
             code = code.Replace("//CHARMAP", CharMaptoC());
             code = code.Replace("//FONTTABLE", AllCharsinFont());
