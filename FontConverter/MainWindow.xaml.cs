@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Unicode;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -74,6 +76,7 @@ namespace FontConverter
                             i.Margin = new Thickness(0);
                             i.Source = WriteChar2BM(((char)c).ToString());
                             i.ToolTip = c;
+                            i.Name = UnicodeInfo.GetName(c).Replace(" ", "_").Replace("-", "_").ToLowerInvariant();
 
                             GridOChars.Children.Add(i);
                             Grid.SetRow(i, y);
@@ -162,6 +165,9 @@ namespace FontConverter
                         preview += " ";
                 }
 
+                string c = ((System.Windows.Controls.Image)sender).ToolTip.ToString();
+                preview += Environment.NewLine + Environment.NewLine + UnicodeInfo.GetName((char)int.Parse(c));
+
                 Preview.Text = preview;
             }
         }
@@ -237,7 +243,7 @@ namespace FontConverter
             }
             result.Remove(result.Length - 2, 2);
 
-            result.Append($"}}, //{(int)c:X4}({c})");
+            result.Append($"}}, //{(int)c:X4}({c}) {UnicodeInfo.GetName(c).ToLowerInvariant()}");
 
             return result.ToString();
         }
