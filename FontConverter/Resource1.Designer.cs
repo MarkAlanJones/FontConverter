@@ -65,7 +65,7 @@ namespace FontConverter {
         ///
         ///namespace Meadow.Foundation.Graphics
         ///{
-        ///    // This is Generated Code
+        ///    // This is code is generated a tool (FontConverter)
         ///    // Based on FONTINFO
         ///    public class MYFONTNAME : FontBase
         ///    {
@@ -76,8 +76,7 @@ namespace FontConverter {
         ///        public override int Height { get { return HEIGHT; }}
         ///
         ///        /// &lt;summary&gt;
-        ///        ///   Font table containing the binary representation of ASCII characters.
-        ///        /// [rest of string was truncated]&quot;;.
+        ///        ///   Font table containing the binary representation of ASCI [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CodeTemplate {
             get {

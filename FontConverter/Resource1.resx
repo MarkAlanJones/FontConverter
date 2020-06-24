@@ -122,7 +122,7 @@
 
 namespace Meadow.Foundation.Graphics
 {
-    // This is Generated Code
+    // This is code is generated a tool (FontConverter)
     // Based on FONTINFO
     public class MYFONTNAME : FontBase
     {
@@ -160,9 +160,9 @@ namespace Meadow.Foundation.Graphics
             {
                 var c = (int)character;
                 if (characterMap.ContainsKey(c))
-                   return _fontTable[characterMap[c]];
+                    return _fontTable[characterMap[c]];
                 else
-                   return _fontTable[0];
+                    return _fontTable[0];
             }
         }
     }
