@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -33,11 +34,26 @@ namespace FontConverter
 
             TheFontW = 12;
             TheFontH = 20;
-            TheFont = new Font("Consolas", 14, System.Drawing.FontStyle.Regular);
-            TheFontFamily = new System.Windows.Media.FontFamily("Consolas");
+            //TheFont = new Font("Consolas", 14, System.Drawing.FontStyle.Regular);
+            //TheFontFamily = new System.Windows.Media.FontFamily("Consolas");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Select initial font
+            ReadOnlyCollection<System.Windows.Media.FontFamily> fonts = (ReadOnlyCollection<System.Windows.Media.FontFamily>)SystemFonts.ItemsSource;
+            if (fonts.Contains(new System.Windows.Media.FontFamily("Consolas")))
+                SystemFonts.SelectedItem = fonts.Where(ff => ff.Source == "Consolas").FirstOrDefault();
+        }
+
+        private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TheFontFamily = (System.Windows.Media.FontFamily)e.AddedItems[0];
+            TheFont = new Font(TheFontFamily.Source, 14, System.Drawing.FontStyle.Regular);
+            UpdateNewFont();
+        }
+
+        private void UpdateNewFont()
         {
             string cr = "";
             foreach (Typeface typeface in TheFontFamily.GetTypefaces())
@@ -53,6 +69,10 @@ namespace FontConverter
 
             MyCharMap = new Dictionary<int, int>();
 
+            GridOChars.Children.Clear();
+            GridOChars.RowDefinitions.Clear();
+            GridOChars.ColumnDefinitions.Clear();
+
             //Populate GridoChars
             for (int y = 0; y < 30; y++)
                 GridOChars.RowDefinitions.Add(new RowDefinition());
@@ -66,7 +86,7 @@ namespace FontConverter
                 for (int x = 0; x < 60; x++)
                 {
                     bool skipping = true;
-                    while (skipping)
+                    while (skipping && c < 0xFFFF)
                     {
                         if (characterMap.ContainsKey(c))
                         {
@@ -76,7 +96,10 @@ namespace FontConverter
                             i.Margin = new Thickness(0);
                             i.Source = WriteChar2BM(((char)c).ToString());
                             i.ToolTip = c;
-                            i.Name = UnicodeInfo.GetName(c).Replace(" ", "_").Replace("-", "_").ToLowerInvariant();
+
+                            string charname = UnicodeInfo.GetName(c);
+                            if (!string.IsNullOrEmpty(charname))
+                                i.Name = charname.Replace(" ", "_").Replace("-", "_").ToLowerInvariant();
 
                             GridOChars.Children.Add(i);
                             Grid.SetRow(i, y);
@@ -89,7 +112,7 @@ namespace FontConverter
                 }
             }
 
-            Label1.Content = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Label1.Content = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*0123456789";
             Label1.FontFamily = TheFontFamily;
             Label1.FontSize = 16;
 
@@ -120,7 +143,7 @@ namespace FontConverter
             using (var g = System.Drawing.Graphics.FromImage(bm))
             {
                 g.Clear(System.Drawing.Color.Black);
-                g.DrawString(c, TheFont, System.Drawing.Brushes.White, -3, -3);
+                g.DrawString(c, TheFont, System.Drawing.Brushes.White, -4, -5); // <-- These values should be tweaked for each font to avoid cutting off descenders etc.
             }
             wbm.AddDirtyRect(new Int32Rect(0, 0, TheFontW, TheFontH));
             wbm.Unlock();
@@ -165,12 +188,18 @@ namespace FontConverter
                         preview += " ";
                 }
 
+                preview += Environment.NewLine + Environment.NewLine;
+
                 string c = ((System.Windows.Controls.Image)sender).ToolTip.ToString();
-                preview += Environment.NewLine + Environment.NewLine + UnicodeInfo.GetName((char)int.Parse(c));
+                string charname = UnicodeInfo.GetName((char)int.Parse(c));
+                if (!string.IsNullOrEmpty(charname))
+                    preview += charname;
 
                 Preview.Text = preview;
             }
         }
+
+        #region Generate Code
 
         //FONTTABLE
         private string AllCharsinFont()
@@ -207,7 +236,6 @@ namespace FontConverter
         private string GetCharEncoded(int[] bits, char c)
         {
             StringBuilder result = new StringBuilder();
-            result.Append("            new byte[] { ");
 
             BitArray ba = new BitArray(TheFontH * TheFontW);
 
@@ -237,16 +265,20 @@ namespace FontConverter
             byte[] fontbyte = new byte[TheFontH * TheFontW / 8];
             ba.CopyTo(fontbyte, 0);
 
+            // encode the font bits into code
+            result.Append("            new byte[] { ");
+
             foreach (var b in fontbyte)
             {
                 result.Append($"0x{b:X2}, ");
             }
             result.Remove(result.Length - 2, 2);
 
-            result.Append($"}}, //{(int)c:X4}({c}) {UnicodeInfo.GetName(c).ToLowerInvariant()}");
+            result.Append($"}}, //{(int)c:X4}({c}) {UnicodeInfo.GetName(c)?.ToLowerInvariant()}");
 
             return result.ToString();
         }
 
+        #endregion
     }
 }

@@ -24,21 +24,31 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
-        <Label
-            x:Name="Label1"
+       
+        <!--  It is very easy to get a list of fonts - everything else is hard but this is easy  -->
+        <ComboBox
+            x:Name="SystemFonts"
             Grid.Row="0"
             Grid.Column="0"
-            Margin="0"
-            Foreground="Black" />
+            FontSize="24"
+            ItemsSource="{x:Static Fonts.SystemFontFamilies}"
+            SelectionChanged="Combobox_SelectionChanged" />
+
         <Label
-            x:Name="Label2"
+            x:Name="Label1"
             Grid.Row="1"
             Grid.Column="0"
             Margin="0"
             Foreground="Black" />
         <Label
-            x:Name="Label3"
+            x:Name="Label2"
             Grid.Row="2"
+            Grid.Column="0"
+            Margin="0"
+            Foreground="Black" />
+        <Label
+            x:Name="Label3"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="0"
             Foreground="Black" />
@@ -72,8 +82,9 @@
             AcceptsReturn="True"
             BorderBrush="DarkCyan"
             BorderThickness="5"
-            FontSize="10"
+            FontSize="10" 
             Foreground="Black"
+            IsReadOnly="True"
             ScrollViewer.VerticalScrollBarVisibility="Visible"
             TextWrapping="Wrap" />
     </Grid>
