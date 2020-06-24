@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Unicode;
@@ -58,6 +57,11 @@ namespace FontConverter
         {
             TheFontFamily = (System.Windows.Media.FontFamily)e.AddedItems[0];
             TweakChanged(sender, null);
+        }
+
+        private void ChangeThreshold(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            RegenerateCode();
         }
 
         private void IsTextAllowed(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -148,8 +152,15 @@ namespace FontConverter
             Label3.Content = cr;
             Label3.FontSize = 16;
 
-            // Generate Code the Meadow can use
+            RegenerateCode();
+        }
 
+        private void RegenerateCode()
+        {
+            if (MyCharMap == null)
+                return;
+
+            // Generate Code the Meadow can use
             string code = Resource1.CodeTemplate;
             code = code.Replace("FONTINFO", (string)Label2.Content + " " + (string)Label3.Content);
             code = code.Replace("MYFONTNAME", (string)Label2.Content + "12x20");
@@ -190,22 +201,14 @@ namespace FontConverter
                 // lets use the average algorithm to get gray scale (4 bytes to 1)
                 for (int x = 0; x < Pixels.Length; x++)
                 {
-                    // get the pixel
-                    int pixel = Pixels[x];
-
-                    // get the component
-                    int blue = (pixel & 0x00FF0000) >> 16;
-                    int green = (pixel & 0x0000FF00) >> 8;
-                    int red = (pixel & 0x000000FF);
-                    uint opacity = ((uint)pixel & (uint)0xFF000000) >> 24;
-
-                    // get the average
-                    int average = (byte)((red + blue + green) / 3);
-                    average = average * (int)(opacity / 255);
+                    // get the greyscale pixel
+                    int average = GSPixel(Pixels[x]);
 
                     // Large Preview 1Bit per pixel
-                    if (average > 128)
+                    if (average > Threshold.Value)
                         preview += "@";
+                    else if (average > Threshold.Value / 2)
+                        preview += "&";
                     else
                         preview += ".";
 
@@ -222,6 +225,21 @@ namespace FontConverter
 
                 Preview.Text = preview;
             }
+        }
+
+        private int GSPixel(int pixel)
+        {
+            // get the component
+            int blue = (pixel & 0x00FF0000) >> 16;
+            int green = (pixel & 0x0000FF00) >> 8;
+            int red = (pixel & 0x000000FF);
+            uint opacity = ((uint)pixel & (uint)0xFF000000) >> 24;
+
+            // get the average
+            int average = (byte)((red + blue + green) / 3);
+            average = average * (int)(opacity / 255);
+
+            return average;
         }
 
         #region Generate Code
@@ -267,21 +285,11 @@ namespace FontConverter
             // lets use the average algorithm to get gray scale (4 bytes to 1)
             for (int x = 0; x < bits.Length; x++)
             {
-                // get the pixel
-                int pixel = bits[x];
-
-                // get the component
-                int blue = (pixel & 0x00FF0000) >> 16;
-                int green = (pixel & 0x0000FF00) >> 8;
-                int red = (pixel & 0x000000FF);
-                uint opacity = ((uint)pixel & (uint)0xFF000000) >> 24;
-
-                // get the average
-                int average = (byte)((red + blue + green) / 3);
-                average = average * (int)(opacity / 255);
+                // get the greyscale pixel
+                int average = GSPixel(bits[x]);
 
                 // encode to 1Bit per pixel
-                if (average > 128)
+                if (average > Threshold.Value)
                     ba[x] = true;
                 else
                     ba[x] = false;
@@ -303,8 +311,6 @@ namespace FontConverter
 
             return result.ToString();
         }
-
-
 
         #endregion
 

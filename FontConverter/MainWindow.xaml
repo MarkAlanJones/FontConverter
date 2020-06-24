@@ -99,18 +99,32 @@
             <Grid x:Name="GridOChars" Background="DarkGray" />
         </Border>
 
-        <TextBlock
-            x:Name="Preview"
+        <StackPanel
             Grid.Row="4"
             Grid.Column="1"
             Margin="10,0,0,10"
-            Background="LightBlue"
-            FontFamily="Consolas"
-            FontSize="18"
-            FontWeight="Bold"
-            Foreground="Black"
-            Text="@@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@"
-            TextWrapping="Wrap" />
+            Orientation="Vertical">
+            <!--  Grey scale to 1 bit where is white vs black  -->
+            <Slider
+                x:Name="Threshold" Background="#FF444444"
+                BorderThickness="0,0,0,5"
+                IsSnapToTickEnabled="True"
+                Maximum="255"
+                Minimum="0" ValueChanged="ChangeThreshold"
+                TickFrequency="8"
+                TickPlacement="BottomRight"
+                ToolTip="{Binding Value}"
+                Value="127" />
+            <TextBlock
+                x:Name="Preview"
+                Background="LightBlue"
+                FontFamily="Consolas"
+                FontSize="18"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="@@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@ @@@@@@@@@@@@"
+                TextWrapping="Wrap" />
+        </StackPanel>
 
         <TextBox
             x:Name="CodeOutput"
