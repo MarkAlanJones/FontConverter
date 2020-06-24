@@ -106,14 +106,16 @@
             Orientation="Vertical">
             <!--  Grey scale to 1 bit where is white vs black  -->
             <Slider
-                x:Name="Threshold" Background="#FF444444"
+                x:Name="Threshold"
+                Background="#FF444444"
                 BorderThickness="0,0,0,5"
                 IsSnapToTickEnabled="True"
                 Maximum="255"
-                Minimum="0" ValueChanged="ChangeThreshold"
+                Minimum="0"
                 TickFrequency="8"
                 TickPlacement="BottomRight"
                 ToolTip="{Binding Value}"
+                ValueChanged="ChangeThreshold"
                 Value="127" />
             <TextBlock
                 x:Name="Preview"
@@ -138,6 +140,7 @@
             FontSize="10"
             Foreground="Black"
             IsReadOnly="True"
+            MouseDoubleClick="SelectAll"
             ScrollViewer.VerticalScrollBarVisibility="Visible"
             TextWrapping="Wrap" />
     </Grid>

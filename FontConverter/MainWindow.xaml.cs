@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Unicode;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,9 +61,30 @@ namespace FontConverter
             TweakChanged(sender, null);
         }
 
+        private void SelectAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            CodeOutput.SelectAll();
+        }
+
+        private Timer t;
+
         private void ChangeThreshold(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            RegenerateCode();
+            if (CodeOutput != null)
+            {
+                if (t != null)
+                    t.Dispose();
+
+                t = new Timer(updatecode, null, 1000, Timeout.Infinite);
+            }
+        }
+
+        private void updatecode(object state)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                CodeOutput.Text = RegenerateCode();
+            });
         }
 
         private void IsTextAllowed(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -152,21 +175,22 @@ namespace FontConverter
             Label3.Content = cr;
             Label3.FontSize = 16;
 
-            RegenerateCode();
+            CodeOutput.Text = RegenerateCode();
         }
 
-        private void RegenerateCode()
+        private string RegenerateCode()
         {
             if (MyCharMap == null)
-                return;
+                return string.Empty;
 
             // Generate Code the Meadow can use
             string code = Resource1.CodeTemplate;
             code = code.Replace("FONTINFO", (string)Label2.Content + " " + (string)Label3.Content);
-            code = code.Replace("MYFONTNAME", (string)Label2.Content + "12x20");
+            code = code.Replace("MYFONTNAME", ((string)Label2.Content).Replace(" ","") + "12x20");
             code = code.Replace("//CHARMAP", CharMaptoC());
             code = code.Replace("//FONTTABLE", AllCharsinFont());
-            CodeOutput.Text = code;
+            code = code.Replace("DETAILS", $"Using threshold of {(int)Threshold.Value:X2} at {DateTime.Now:o}");
+            return code;
         }
 
         // We need a WritableBitMap, but graphics Drawstring is for Bitmaps - but they can share memory !
@@ -227,7 +251,7 @@ namespace FontConverter
             }
         }
 
-        private int GSPixel(int pixel)
+        private static int GSPixel(int pixel)
         {
             // get the component
             int blue = (pixel & 0x00FF0000) >> 16;
@@ -313,7 +337,5 @@ namespace FontConverter
         }
 
         #endregion
-
-
     }
 }
