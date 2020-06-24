@@ -25,6 +25,8 @@ namespace FontConverter
         System.Windows.Media.FontFamily TheFontFamily;
         int TheFontW;
         int TheFontH;
+        int offx;
+        int offy;
         private IDictionary<int, ushort> characterMap;
         private Dictionary<int, int> MyCharMap;
 
@@ -34,8 +36,14 @@ namespace FontConverter
 
             TheFontW = 12;
             TheFontH = 20;
-            //TheFont = new Font("Consolas", 14, System.Drawing.FontStyle.Regular);
-            //TheFontFamily = new System.Windows.Media.FontFamily("Consolas");
+
+            Points.Text = "14";
+
+            offx = -3;
+            xoffset.Text = offx.ToString();
+
+            offy = -3;
+            yoffset.Text = offy.ToString();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -49,8 +57,25 @@ namespace FontConverter
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TheFontFamily = (System.Windows.Media.FontFamily)e.AddedItems[0];
-            TheFont = new Font(TheFontFamily.Source, 14, System.Drawing.FontStyle.Regular);
-            UpdateNewFont();
+            TweakChanged(sender, null);
+        }
+
+        private void IsTextAllowed(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !(e.Text.Contains("-") || int.TryParse(e.Text, out _));
+        }
+
+        private void TweakChanged(object sender, TextChangedEventArgs e)
+        {
+            if (int.TryParse(Points.Text, out int value) && TheFontFamily != null)
+                TheFont = new Font(TheFontFamily.Source, value, System.Drawing.FontStyle.Regular);
+            if (int.TryParse(xoffset.Text, out int valuex))
+                offx = valuex;
+            if (int.TryParse(yoffset.Text, out int valuey))
+                offy = valuey;
+
+            if (TheFont != null)
+                UpdateNewFont();
         }
 
         private void UpdateNewFont()
@@ -143,7 +168,7 @@ namespace FontConverter
             using (var g = System.Drawing.Graphics.FromImage(bm))
             {
                 g.Clear(System.Drawing.Color.Black);
-                g.DrawString(c, TheFont, System.Drawing.Brushes.White, -4, -5); // <-- These values should be tweaked for each font to avoid cutting off descenders etc.
+                g.DrawString(c, TheFont, System.Drawing.Brushes.White, offx, offy);
             }
             wbm.AddDirtyRect(new Int32Rect(0, 0, TheFontW, TheFontH));
             wbm.Unlock();
@@ -279,6 +304,10 @@ namespace FontConverter
             return result.ToString();
         }
 
+
+
         #endregion
+
+
     }
 }

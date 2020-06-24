@@ -24,15 +24,54 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="140" />
         </Grid.ColumnDefinitions>
-       
-        <!--  It is very easy to get a list of fonts - everything else is hard but this is easy  -->
-        <ComboBox
-            x:Name="SystemFonts"
+
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            FontSize="24"
-            ItemsSource="{x:Static Fonts.SystemFontFamilies}"
-            SelectionChanged="Combobox_SelectionChanged" />
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Stretch"
+            Orientation="Horizontal">
+            <!--  It is very easy to get a list of fonts - everything else is hard but this is easy  -->
+            <ComboBox
+                x:Name="SystemFonts"
+                Width="800"
+                FontSize="24"
+                ItemsSource="{x:Static Fonts.SystemFontFamilies}"
+                SelectionChanged="Combobox_SelectionChanged" />
+            <TextBox
+                x:Name="Points"
+                Width="30"
+                Margin="25,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="LightGray"
+                FontSize="18"
+                PreviewTextInput="IsTextAllowed"
+                TextChanged="TweakChanged" />
+            <TextBlock VerticalAlignment="Center" Text="pt" />
+            <TextBox
+                x:Name="xoffset"
+                Width="30"
+                Margin="15,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="LightGray"
+                FontSize="18"
+                PreviewTextInput="IsTextAllowed"
+                TextChanged="TweakChanged" />
+            <TextBlock VerticalAlignment="Center" Text="x" />
+            <TextBox
+                x:Name="yoffset"
+                Width="30"
+                Margin="5,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="LightGray"
+                FontSize="18"
+                PreviewTextInput="IsTextAllowed"
+                TextChanged="TweakChanged" />
+            <TextBlock VerticalAlignment="Center" Text="y" />
+        </StackPanel>
 
         <Label
             x:Name="Label1"
@@ -82,7 +121,7 @@
             AcceptsReturn="True"
             BorderBrush="DarkCyan"
             BorderThickness="5"
-            FontSize="10" 
+            FontSize="10"
             Foreground="Black"
             IsReadOnly="True"
             ScrollViewer.VerticalScrollBarVisibility="Visible"
