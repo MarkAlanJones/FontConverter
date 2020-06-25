@@ -14,7 +14,7 @@ The difficulty for a WPF app, is that the WriteableBitmaps do not have a drawstr
 
 The application does not read or write any files.
 1. Pick a font from the dropdown at the top - Monospaced fonts may work better, but there is no indication of which are monospaced.
-2. Mouse over the character (4 btyes per pixel) to see how the pixels will be interpretted it. @ is on, . is off. The & is used for pixels that may become @ if you move the slider to the left.
+2. Mouse over the character (4 btyes per pixel) to see how the pixels will be interpretted for it. @ is on, . is off. The & is used for pixels that may become @ if you move the slider to the left.
 3. The Threshhold slider sets where black becomes white. Typically move it to the left to fill in fonts, move to the right to open up close spots.
 4. The 14pt setting should fill the 12x20 box for most fonts. it can be adjusted up or down if necessary
 5. The x and y position shift the image within the box. look at characters with descenders and see if they are cut off. See if there is too much space on the left or right.
